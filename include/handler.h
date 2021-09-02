@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include <random>
+#include <string>
 #include <type_traits>
 
 namespace ns_test
@@ -30,8 +31,8 @@ namespace ns_test
         int64_t lastDuration();
         int64_t totalDuration();
 
-        std::string lastDurStr();
-        std::string totalDurStr();
+        std::string lastDurStr(const std::string &describe = "last_Dur");
+        std::string totalDurStr(const std::string &describe = "total_Dur");
 
     protected:
         int64_t getDuration(const TimePoint &ref);
@@ -73,19 +74,19 @@ namespace ns_test
     }
 
     template <typename _Tf, typename _C>
-    std::string DurationTimer<_Tf, _C>::lastDurStr()
+    std::string DurationTimer<_Tf, _C>::lastDurStr(const std::string &describe)
     {
         auto dur = this->lastDuration();
-        std::string str = " last_Dur{";
+        std::string str = describe + '{';
         str += std::to_string(dur) + this->_stad + '}';
         return str;
     }
 
     template <typename _Tf, typename _C>
-    std::string DurationTimer<_Tf, _C>::totalDurStr()
+    std::string DurationTimer<_Tf, _C>::totalDurStr(const std::string &describe)
     {
         auto dur = this->totalDuration();
-        std::string str = "total_Dur{";
+        std::string str = describe + '{';
         str += std::to_string(dur) + this->_stad + '}';
         return str;
     }

@@ -55,15 +55,15 @@
         vec.push_back(i);
     }
     <span class="hljs-comment">// output the period of the last duration</span>
-    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; timer.lastDurStr() &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; timer.lastDurStr(<span class="hljs-string">&quot;Create_Vector&quot;</span>) &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
     <span class="hljs-comment">// do something : shuffle</span>
     <span class="hljs-built_in">std</span>::shuffle(vec.begin(), vec.end(), <span class="hljs-built_in">std</span>::default_random_engine());
     <span class="hljs-comment">// output the period of the last duration</span>
-    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; timer.lastDurStr() &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; timer.lastDurStr(<span class="hljs-string">&quot;Shuffle_Vector&quot;</span>) &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
     <span class="hljs-comment">// do something : sort</span>
     <span class="hljs-built_in">std</span>::sort(vec.begin(), vec.end());
     <span class="hljs-comment">// output the period of the last duration</span>
-    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; timer.lastDurStr() &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
+    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; timer.lastDurStr(<span class="hljs-string">&quot;Sort_Vector&quot;</span>) &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
     <span class="hljs-comment">// output the period of the total duration</span>
     <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt; timer.totalDurStr() &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;
     <span class="hljs-keyword">return</span>;
@@ -100,15 +100,15 @@ DurationTimer&lt;<span class="hljs-built_in">std</span>::chrono::minutes, <span 
 <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> _Tf, <span class="hljs-keyword">typename</span> _C&gt;
 <span class="hljs-keyword">int64_t</span> DurationTimer&lt;_Tf, _C&gt;::totalDuration()
 </div></code></pre>
-<p><kbd>lastDurStr()</kbd></p>
+<p><kbd>lastDurStr(const std::string &amp;describe = &quot;last_Dur&quot;)</kbd></p>
 <pre><code class="language-cpp"><div><span class="hljs-comment">// get the last duration string exp : public</span>
 <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> _Tf, <span class="hljs-keyword">typename</span> _C&gt;
-<span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> DurationTimer&lt;_Tf, _C&gt;::lastDurStr()
+<span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> DurationTimer&lt;_Tf, _C&gt;::lastDurStr(<span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> &amp;describe = <span class="hljs-string">&quot;last_Dur&quot;</span>)
 </div></code></pre>
-<p><kbd>totalDurStr()</kbd></p>
+<p><kbd>totalDurStr(const std::string &amp;describe = &quot;total_Dur&quot;)</kbd></p>
 <pre><code class="language-cpp"><div><span class="hljs-comment">// get the total duration string exp : public</span>
 <span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> _Tf, <span class="hljs-keyword">typename</span> _C&gt;
-<span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> DurationTimer&lt;_Tf, _C&gt;::totalDurStr()
+<span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> DurationTimer&lt;_Tf, _C&gt;::totalDurStr(<span class="hljs-keyword">const</span> <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> &amp;describe = <span class="hljs-string">&quot;total_Dur&quot;</span>)
 </div></code></pre>
 <p><kbd>getDuration(const TimePoint &amp;ref)</kbd></p>
 <pre><code class="language-cpp"><div><span class="hljs-comment">// get the duration between current and last time : protected</span>

@@ -20,15 +20,15 @@ void foo()
         vec.push_back(i);
     }
     // output the period of the last duration
-    std::cout << timer.lastDurStr() << std::endl;
+    std::cout << timer.lastDurStr("Create_Vector") << std::endl;
     // do something : shuffle
     std::shuffle(vec.begin(), vec.end(), std::default_random_engine());
     // output the period of the last duration
-    std::cout << timer.lastDurStr() << std::endl;
+    std::cout << timer.lastDurStr("Shuffle_Vector") << std::endl;
     // do something : sort
     std::sort(vec.begin(), vec.end());
     // output the period of the last duration
-    std::cout << timer.lastDurStr() << std::endl;
+    std::cout << timer.lastDurStr("Sort_Vector") << std::endl;
     // output the period of the total duration
     std::cout << timer.totalDurStr() << std::endl;
     return;
@@ -74,19 +74,19 @@ int64_t DurationTimer<_Tf, _C>::lastDuration()
 template <typename _Tf, typename _C>
 int64_t DurationTimer<_Tf, _C>::totalDuration()
 ```
-<kbd>lastDurStr()</kbd> 
+<kbd>lastDurStr(const std::string &describe = "last_Dur")</kbd> 
 
 ```cpp
 // get the last duration string exp : public
 template <typename _Tf, typename _C>
-std::string DurationTimer<_Tf, _C>::lastDurStr()
+std::string DurationTimer<_Tf, _C>::lastDurStr(const std::string &describe = "last_Dur")
 ```
-<kbd>totalDurStr()</kbd> 
+<kbd>totalDurStr(const std::string &describe = "total_Dur")</kbd> 
 
 ```cpp
 // get the total duration string exp : public
 template <typename _Tf, typename _C>
-std::string DurationTimer<_Tf, _C>::totalDurStr()
+std::string DurationTimer<_Tf, _C>::totalDurStr(const std::string &describe = "total_Dur")
 ```
 <kbd>getDuration(const TimePoint &ref)</kbd> 
 
