@@ -8,7 +8,7 @@
 #include <string>
 #include <type_traits>
 
-namespace ns_test
+namespace ns_timer
 {
     // a template class for duration time print
     template <typename _Tf = std::chrono::milliseconds, typename _C = std::chrono::steady_clock>
@@ -42,15 +42,15 @@ namespace ns_test
     DurationTimer<_Tf, _C>::DurationTimer()
     {
         if (true == std::is_same<TimeFormat, std::chrono::microseconds>::value)
-            this->_stad = "(us)";
+            this->_stad = " us";
         if (true == std::is_same<TimeFormat, std::chrono::milliseconds>::value)
-            this->_stad = "(ms)";
+            this->_stad = " ms";
         if (true == std::is_same<TimeFormat, std::chrono::seconds>::value)
-            this->_stad = "(s)";
+            this->_stad = " s";
         if (true == std::is_same<TimeFormat, std::chrono::minutes>::value)
-            this->_stad = "(m)";
+            this->_stad = " m";
         if (true == std::is_same<TimeFormat, std::chrono::hours>::value)
-            this->_stad = "(h)";
+            this->_stad = " h";
     }
 
     template <typename _Tf, typename _C>
