@@ -1,5 +1,6 @@
 # DurationTimer
-<kbd>___DurationTimer___</kbd> is a c++ template class for timer. You can use it easily to count the ran time.This time statistics class provides two timing methods: <kbd>last Duration</kbd> and <kbd>total duration.</kbd> The detail ans example are below.
+<kbd>___DurationTimer___</kbd> is a c++ template class for timer. You can use it easily to count the ran time.This time statistics class provides two timing methods: <kbd>last Duration</kbd> and <kbd>total duration.</kbd> The detail ans example are below.  
+And because it's a template class, you can just copy the head file and use it easily.
 ## Author
 <kbd>___name___</kbd> ShuoLong Chen  
 <kbd>___eamil___</kbd> 3079625093@qq.com
