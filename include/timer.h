@@ -2,103 +2,141 @@
 
 #include <iostream>
 #include <chrono>
-#include <vector>
-#include <algorithm>
-#include <random>
 #include <string>
 #include <type_traits>
 
 namespace ns_timer
 {
-    // a template class for duration time print
-    template <typename _Tf = std::chrono::milliseconds, typename _C = std::chrono::steady_clock>
-    class DurationTimer
+    struct TimeUnit
     {
     public:
-        typedef _C Clock;
-        typedef _Tf TimeFormat;
-        typedef typename _C::time_point TimePoint;
-
-    private:
-        TimePoint _last;
-        TimePoint _start;
-        std::string _stad;
-
-    public:
-        DurationTimer();
-        void init();
-
-        int64_t lastDuration();
-        int64_t totalDuration();
-
-        std::string lastDurStr(const std::string &describe = "last_Dur");
-        std::string totalDurStr(const std::string &describe = "total_Dur");
-
-    protected:
-        int64_t getDuration(const TimePoint &ref);
+        /**
+         * @brief time units in the std::chrono
+         */
+        using ns = std::chrono::nanoseconds;
+        using us = std::chrono::microseconds;
+        using ms = std::chrono::milliseconds;
+        using s = std::chrono::seconds;
+        using min = std::chrono::minutes;
+        using h = std::chrono::hours;
     };
 
-    template <typename _Tf, typename _C>
-    DurationTimer<_Tf, _C>::DurationTimer()
+    /**
+     * @brief the Timer class to timing
+     * 
+     * @tparam ClockType the type of the clock used, eg:std::chrono::system_clock
+     */
+    template <typename ClockType = std::chrono::system_clock>
+    class Timer
     {
-        if (true == std::is_same<TimeFormat, std::chrono::microseconds>::value)
-            this->_stad = " us";
-        if (true == std::is_same<TimeFormat, std::chrono::milliseconds>::value)
-            this->_stad = " ms";
-        if (true == std::is_same<TimeFormat, std::chrono::seconds>::value)
-            this->_stad = " s";
-        if (true == std::is_same<TimeFormat, std::chrono::minutes>::value)
-            this->_stad = " m";
-        if (true == std::is_same<TimeFormat, std::chrono::hours>::value)
-            this->_stad = " h";
-    }
+    public:
+        using default_dur_type = std::chrono::milliseconds;
+        using clock_type = ClockType;
+        using time_point_type = typename clock_type::time_point;
 
-    template <typename _Tf, typename _C>
-    void DurationTimer<_Tf, _C>::init()
-    {
-        this->_start = Clock::now();
-        this->_last = Clock::now();
-        return;
-    }
+    private:
+        const time_point_type _start;
+        time_point_type _last;
 
-    template <typename _Tf, typename _C>
-    int64_t DurationTimer<_Tf, _C>::lastDuration()
-    {
-        return this->getDuration(this->_last);
-    }
+    public:
+        Timer() : _start(clock_type::now()), _last(clock_type::now()) {}
 
-    template <typename _Tf, typename _C>
-    int64_t DurationTimer<_Tf, _C>::totalDuration()
-    {
-        return this->getDuration(this->_start);
-    }
+        /**
+         * @brief get the last duration from the 'start' time point to 'now' time point
+         * 
+         * @tparam DurationType the type of std::duration, eg: std::chrono::milliseconds, std::chrono::seconds
+         * @return float the duration count
+         */
+        template <typename DurationType = default_dur_type>
+        float lastDuration() { return this->getCount<DurationType>(this->_last); }
 
-    template <typename _Tf, typename _C>
-    std::string DurationTimer<_Tf, _C>::lastDurStr(const std::string &describe)
-    {
-        auto dur = this->lastDuration();
-        std::string str = describe + '{';
-        str += std::to_string(dur) + this->_stad + '}';
-        return str;
-    }
+        /**
+         * @brief get the total duration from the 'start' time point to 'now' time point
+         * 
+         * @tparam DurationType the type of std::duration, eg: std::chrono::milliseconds, std::chrono::seconds
+         * @return float the duration count
+         */
+        template <typename DurationType = default_dur_type>
+        float totalDuration() { return this->getCount<DurationType>(this->_start); }
 
-    template <typename _Tf, typename _C>
-    std::string DurationTimer<_Tf, _C>::totalDurStr(const std::string &describe)
-    {
-        auto dur = this->totalDuration();
-        std::string str = describe + '{';
-        str += std::to_string(dur) + this->_stad + '}';
-        return str;
-    }
+        /**
+         * @brief get the last duration from the 'start' time point to 'now' time point
+         * 
+         * @tparam DurationType the type of std::duration, eg: std::chrono::milliseconds, std::chrono::seconds
+         * @param desc the describe of this duration
+         * @return std::string the duration string
+         */
+        template <typename DurationType = default_dur_type>
+        std::string lastDurationStr(const std::string &desc = "lastDur")
+        {
+            std::string str;
+            str += '{';
+            str += desc + ": " + std::to_string(this->lastDuration<DurationType>()) + this->getTimerUnit<DurationType>();
+            str += '}';
+            return str;
+        }
 
-    template <typename _Tf, typename _C>
-    int64_t DurationTimer<_Tf, _C>::getDuration(const TimePoint &ref)
-    {
-        auto cur = Clock::now();
-        auto duration = std::chrono::duration_cast<TimeFormat>(cur - ref).count();
-        this->_last = cur;
-        return duration;
-    }
+        /**
+         * @brief get the total duration from the 'start' time point to 'now' time point
+         * 
+         * @tparam DurationType the type of std::duration, eg: std::chrono::milliseconds, std::chrono::seconds
+         * @param desc the describe of this duration
+         * @return std::string the duration string
+         */
+        template <typename DurationType = default_dur_type>
+        std::string totalDurationStr(const std::string &desc = "totalDur")
+        {
+            std::string str;
+            str += '{';
+            str += desc + ": " + std::to_string(this->totalDuration<DurationType>()) + this->getTimerUnit<DurationType>();
+            str += '}';
+            return str;
+        }
 
-    void foo();
+    protected:
+        /**
+         * @brief Get the time unit for the duration type
+         * 
+         * @tparam DurationType the type of std::duration
+         * @return std::string the unit string
+         */
+        template <typename DurationType = default_dur_type>
+        std::string getTimerUnit() const
+        {
+            if (std::is_same<DurationType, std::chrono::nanoseconds>::value)
+                return "(ns)";
+            else if (std::is_same<DurationType, std::chrono::microseconds>::value)
+                return "(us)";
+            else if (std::is_same<DurationType, std::chrono::milliseconds>::value)
+                return "(ms)";
+            else if (std::is_same<DurationType, std::chrono::seconds>::value)
+                return "(s)";
+            else if (std::is_same<DurationType, std::chrono::minutes>::value)
+                return "(min)";
+            else if (std::is_same<DurationType, std::chrono::hours>::value)
+                return "(h)";
+            return "";
+        }
+
+        /**
+         * @brief Get the timer's count
+         * 
+         * @tparam DurationType the type of std::duration
+         * @param ref the reference duration to count. eg: this->_start, this->_last
+         * @return float the count value
+         */
+        template <typename DurationType = default_dur_type>
+        float getCount(const time_point_type &ref)
+        {
+            using cast_type = std::chrono::duration<float, typename DurationType::period>;
+            auto dur = std::chrono::duration_cast<cast_type>(clock_type::now() - ref);
+            this->_last = clock_type::now();
+            return dur.count();
+        }
+
+    private:
+        Timer(const Timer &) = delete;
+        Timer(Timer &&) = delete;
+        Timer &operator=(const Timer &) = delete;
+    };
 } // namespace ns_test
