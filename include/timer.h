@@ -30,7 +30,7 @@ struct TimeUnit {
    * @return std::string the unit string
    */
   template <typename DurationType>
-  static std::string getTimerUnit() {
+  static std::string timeunit_str() {
     if (std::is_same<DurationType, TimeUnit::ns>::value)
       return "(ns)";
     else if (std::is_same<DurationType, TimeUnit::us>::value)
@@ -90,8 +90,8 @@ class Timer {
    * @return float the duration count
    */
   template <typename DurationType = default_dur_type>
-  float lastDuration() {
-    return this->getCount<DurationType>(this->_last);
+  float last_elapsed() {
+    return this->count<DurationType>(this->_last);
   }
 
   /**
@@ -103,8 +103,8 @@ class Timer {
    * @return float the duration count
    */
   template <typename DurationType = default_dur_type>
-  float totalDuration() {
-    return this->getCount<DurationType>(this->_start);
+  float total_elapsed() {
+    return this->count<DurationType>(this->_start);
   }
 
   /**
@@ -117,11 +117,11 @@ class Timer {
    * @return std::string the duration string
    */
   template <typename DurationType = default_dur_type>
-  std::string lastDurationStr(const std::string &desc = "lastDur") {
+  std::string last_elapsed(const std::string &desc) {
     std::string str;
     str += '{';
-    str += desc + ": " + std::to_string(this->lastDuration<DurationType>()) +
-           TimeUnit::getTimerUnit<DurationType>();
+    str += desc + ": " + std::to_string(this->last_elapsed<DurationType>()) +
+           TimeUnit::timeunit_str<DurationType>();
     str += '}';
     return str;
   }
@@ -136,11 +136,11 @@ class Timer {
    * @return std::string the duration string
    */
   template <typename DurationType = default_dur_type>
-  std::string totalDurationStr(const std::string &desc = "totalDur") {
+  std::string total_elapsed(const std::string &desc) {
     std::string str;
     str += '{';
-    str += desc + ": " + std::to_string(this->totalDuration<DurationType>()) +
-           TimeUnit::getTimerUnit<DurationType>();
+    str += desc + ": " + std::to_string(this->total_elapsed<DurationType>()) +
+           TimeUnit::timeunit_str<DurationType>();
     str += '}';
     return str;
   }
@@ -166,7 +166,7 @@ class Timer {
    * @return float the count value
    */
   template <typename DurationType = default_dur_type>
-  float getCount(const time_point_type &ref) {
+  float count(const time_point_type &ref) {
     using cast_type =
         std::chrono::duration<float, typename DurationType::period>;
     auto dur = std::chrono::duration_cast<cast_type>(clock_type::now() - ref);

@@ -105,7 +105,7 @@ DurationTimer<std::chrono::system_clock> sedc_timer;
 
 ```
 
-<kbd>lastDuration()</kbd> 
+<kbd>last_elapsed()</kbd> 
 
 ```cpp
 /**
@@ -115,7 +115,7 @@ DurationTimer<std::chrono::system_clock> sedc_timer;
  * @return float the duration count
  */
 ```
-<kbd>totalDuration()</kbd> 
+<kbd>total_elapsed()</kbd> 
 
 ```cpp
 /**
@@ -125,7 +125,7 @@ DurationTimer<std::chrono::system_clock> sedc_timer;
  * @return float the duration count
  */
 ```
-<kbd>lastDurationStr(const std::string &desc = "lastDur")</kbd> 
+<kbd>last_elapsed(const std::string &desc)</kbd> 
 
 ```cpp
 /**
@@ -136,7 +136,7 @@ DurationTimer<std::chrono::system_clock> sedc_timer;
  * @return std::string the duration string
  */
 ```
-<kbd>totalDurationStr(const std::string &desc = "totalDur")</kbd> 
+<kbd>total_elapsed(const std::string &desc)</kbd> 
 
 ```cpp
 /**
