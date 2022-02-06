@@ -3,6 +3,7 @@
 #include <chrono>
 #include <iostream>
 #include <string>
+#include <thread>
 #include <type_traits>
 
 namespace ns_timer {
@@ -18,7 +19,48 @@ struct TimeUnit {
   using s = std::chrono::seconds;
   using min = std::chrono::minutes;
   using h = std::chrono::hours;
+
+ protected:
+  template <typename ClockType>
+  friend class Timer;
+  /**
+   * @brief Get the time unit for the duration type
+   *
+   * @tparam DurationType the type of std::duration
+   * @return std::string the unit string
+   */
+  template <typename DurationType>
+  static std::string getTimerUnit() {
+    if (std::is_same<DurationType, TimeUnit::ns>::value)
+      return "(ns)";
+    else if (std::is_same<DurationType, TimeUnit::us>::value)
+      return "(us)";
+    else if (std::is_same<DurationType, TimeUnit::ms>::value)
+      return "(ms)";
+    else if (std::is_same<DurationType, TimeUnit::s>::value)
+      return "(s)";
+    else if (std::is_same<DurationType, TimeUnit::min>::value)
+      return "(min)";
+    else if (std::is_same<DurationType, TimeUnit::h>::value)
+      return "(h)";
+    return "";
+  }
+
+ private:
+  TimeUnit() = delete;
 };
+
+/**
+ * @brief sleep for the 'period'
+ *
+ * @tparam DurationType the type of duration
+ * @param period the time to sleep
+ */
+template <typename DurationType = std::chrono::milliseconds>
+void sleep(const typename DurationType::rep &period) {
+  std::this_thread::sleep_for(DurationType(period));
+  return;
+}
 
 /**
  * @brief the Timer class to timing
@@ -79,7 +121,7 @@ class Timer {
     std::string str;
     str += '{';
     str += desc + ": " + std::to_string(this->lastDuration<DurationType>()) +
-           this->getTimerUnit<DurationType>();
+           TimeUnit::getTimerUnit<DurationType>();
     str += '}';
     return str;
   }
@@ -98,35 +140,24 @@ class Timer {
     std::string str;
     str += '{';
     str += desc + ": " + std::to_string(this->totalDuration<DurationType>()) +
-           this->getTimerUnit<DurationType>();
+           TimeUnit::getTimerUnit<DurationType>();
     str += '}';
     return str;
   }
 
- protected:
   /**
-   * @brief Get the time unit for the duration type
+   * @brief sleep for the 'period'
    *
-   * @tparam DurationType the type of std::duration
-   * @return std::string the unit string
+   * @tparam DurationType the type of duration
+   * @param period the time to sleep
    */
   template <typename DurationType = default_dur_type>
-  std::string getTimerUnit() const {
-    if (std::is_same<DurationType, std::chrono::nanoseconds>::value)
-      return "(ns)";
-    else if (std::is_same<DurationType, std::chrono::microseconds>::value)
-      return "(us)";
-    else if (std::is_same<DurationType, std::chrono::milliseconds>::value)
-      return "(ms)";
-    else if (std::is_same<DurationType, std::chrono::seconds>::value)
-      return "(s)";
-    else if (std::is_same<DurationType, std::chrono::minutes>::value)
-      return "(min)";
-    else if (std::is_same<DurationType, std::chrono::hours>::value)
-      return "(h)";
-    return "";
+  void sleep(const typename DurationType::rep &period) {
+    std::this_thread::sleep_for(DurationType(period));
+    return;
   }
 
+ protected:
   /**
    * @brief Get the timer's count
    *
@@ -148,4 +179,5 @@ class Timer {
   Timer(Timer &&) = delete;
   Timer &operator=(const Timer &) = delete;
 };
+
 }  // namespace ns_timer

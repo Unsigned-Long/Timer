@@ -25,6 +25,9 @@ void foo() {
   std::cout << timer.lastDurationStr("sort vector") << std::endl;
   // output the period of the total duration
   std::cout << timer.totalDurationStr("total cost") << std::endl;
+  // sleep for 2s
+  ns_timer::sleep<ns_timer::TimeUnit::s>(2);
+  std::cout << timer.lastDurationStr<ns_timer::TimeUnit::s>("sleep") << std::endl;
   return;
 }
 

@@ -39,16 +39,18 @@ void foo()
 output
 ```log
 # debug
-{create vector: 3.642148(ms)}
-{shuffle vector: 6.338767(ms)}
-{sort vector: 33.067055(ms)}
-{total cost: 43.070072(ms)}
+{create vector: 3.888439(ms)}
+{shuffle vector: 12.342250(ms)}
+{sort vector: 30.742424(ms)}
+{total cost: 46.995686(ms)}
+{sleep: 2.000096(s)}
 
 # release
-{create vector: 1.320519(ms)}
-{shuffle vector: 3.202963(ms)}
-{sort vector: 11.681123(ms)}
-{total cost: 16.230465(ms)}
+{create vector: 1.025685(ms)}
+{shuffle vector: 2.621002(ms)}
+{sort vector: 9.609744(ms)}
+{total cost: 13.280755(ms)}
+{sleep: 2.000092(s)}
 ```
 
 ## APIs
@@ -59,8 +61,8 @@ struct TimeUnit
 {
 public:
     /**
-        * @brief time units in the std::chrono
-        */
+     * @brief time units in the std::chrono
+     */
     using ns = std::chrono::nanoseconds;
     using us = std::chrono::microseconds;
     using ms = std::chrono::milliseconds;
@@ -70,8 +72,18 @@ public:
 };
 ```
 
+<kbd>sleep(const typename DurationType::rep &period)</kbd>
 
-<kbd>constructor</kbd> 
+```cpp
+/**
+ * @brief sleep for the 'period'
+ *
+ * @tparam DurationType the type of duration
+ * @param period the time to sleep
+ */
+```
+
+<kbd>Timer Constructor</kbd> 
 
 ```cpp
 // the constructor
