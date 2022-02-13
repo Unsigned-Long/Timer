@@ -1,16 +1,28 @@
 # DurationTimer
 
+[TOC]
+
 ## Author
-<kbd>___name___</kbd> ShuoLong Chen  
-<kbd>___eamil___</kbd> 3079625093@qq.com
+___name___ ShuoLong Chen  
+___eamil___ 3079625093@qq.com
+
+```cpp
+  _|      _|                                      
+_|_|_|_|      _|_|_|  _|_|      _|_|    _|  _|_|  
+  _|      _|  _|    _|    _|  _|_|_|_|  _|_|      
+  _|      _|  _|    _|    _|  _|        _|        
+    _|_|  _|  _|    _|    _|    _|_|_|  _|       
+```
+
+
 
 ## OverView
 
-<kbd>___DurationTimer___</kbd> is a c++ template class for timer. You can use it easily to count the ran time.This time statistics class provides two timing methods: <kbd>last Duration</kbd> and <kbd>total duration.</kbd> The detail ans example are below.  
+___DurationTimer___ is a c++ template class for timer. You can use it easily to count the ran time.This time statistics class provides two timing methods: ___last Duration___ and ___total duration.___ The detail ans example are below.  
 And because it's a template class, you can just copy the head file and use it easily.
 
 ## Usage Example
-<kbd>___Code___</kbd> 
+___Code___
 
 ```cpp
 void foo()
@@ -36,7 +48,7 @@ void foo()
     return;
 }
 ```
-output
+___output___
 ```log
 # debug
 {create vector: 3.888439(ms)}
@@ -54,7 +66,7 @@ output
 ```
 
 ## APIs
-<kbd>TimeUnit</kbd> 
+___TimeUnit___ 
 
 ```cpp
 struct TimeUnit
@@ -72,7 +84,7 @@ public:
 };
 ```
 
-<kbd>sleep(const typename DurationType::rep &period)</kbd>
+___sleep(const typename DurationType::rep &period)___
 
 ```cpp
 /**
@@ -83,7 +95,7 @@ public:
  */
 ```
 
-<kbd>Timer Constructor</kbd> 
+___Timer Constructor___ 
 
 ```cpp
 // the constructor
@@ -105,7 +117,7 @@ DurationTimer<std::chrono::system_clock> sedc_timer;
 
 ```
 
-<kbd>last_elapsed()</kbd> 
+___last_elapsed()___ 
 
 ```cpp
 /**
@@ -115,7 +127,7 @@ DurationTimer<std::chrono::system_clock> sedc_timer;
  * @return float the duration count
  */
 ```
-<kbd>total_elapsed()</kbd> 
+___total_elapsed()___ 
 
 ```cpp
 /**
@@ -125,7 +137,7 @@ DurationTimer<std::chrono::system_clock> sedc_timer;
  * @return float the duration count
  */
 ```
-<kbd>last_elapsed(const std::string &desc)</kbd> 
+___last_elapsed(const std::string &desc)___ 
 
 ```cpp
 /**
@@ -136,7 +148,7 @@ DurationTimer<std::chrono::system_clock> sedc_timer;
  * @return std::string the duration string
  */
 ```
-<kbd>total_elapsed(const std::string &desc)</kbd> 
+___total_elapsed(const std::string &desc)___ 
 
 ```cpp
 /**
