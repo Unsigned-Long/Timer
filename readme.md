@@ -18,34 +18,36 @@ _|_|_|_|      _|_|_|  _|_|      _|_|    _|  _|_|
 
 ## OverView
 
-___DurationTimer___ is a c++ template class for timer. You can use it easily to count the ran time.This time statistics class provides two timing methods: ___last Duration___ and ___total duration.___ The detail ans example are below.  
+___Timer___ is a c++ template class for timer. You can use it easily to count the ran time.This time statistics class provides two timing methods: ___last_elapsed___ and ___total_elapsed___. The detail ans example are below.  
 And because it's a template class, you can just copy the head file and use it easily.
 
 ## Usage Example
 ___Code___
 
 ```cpp
-void foo()
-{
-    // define a timer
-    Timer<std::chrono::system_clock> timer;
-    // do something : generate elems and push_back to vec
-    std::vector<int> vec;
-    for (int i = 0; i != 100000; ++i)
-        vec.push_back(i);
-    // output the period of the last duration
-    std::cout << timer.lastDurationStr<TimeUnit::ms>("create vector") << std::endl;
-    // do something : shuffle
-    std::shuffle(vec.begin(), vec.end(), std::default_random_engine());
-    // output the period of the last duration
-    std::cout << timer.lastDurationStr("shuffle vector") << std::endl;
-    // do something : sort
-    std::sort(vec.begin(), vec.end());
-    // output the period of the last duration
-    std::cout << timer.lastDurationStr("sort vector") << std::endl;
-    // output the period of the total duration
-    std::cout << timer.totalDurationStr("total cost") << std::endl;
-    return;
+void foo() {
+  // define a timer
+  Timer<std::chrono::system_clock> timer;
+  // do something : generate elems and push_back to vec
+  std::vector<int> vec;
+  for (int i = 0; i != 100000; ++i) vec.push_back(i);
+  // output the period of the last duration
+  std::cout << timer.last_elapsed<TimeUnit::ms>("create vector")
+            << std::endl;
+  // do something : shuffle
+  std::shuffle(vec.begin(), vec.end(), std::default_random_engine());
+  // output the period of the last duration
+  std::cout << timer.last_elapsed("shuffle vector") << std::endl;
+  // do something : sort
+  std::sort(vec.begin(), vec.end());
+  // output the period of the last duration
+  std::cout << timer.last_elapsed("sort vector") << std::endl;
+  // output the period of the total duration
+  std::cout << timer.total_elapsed("total cost") << std::endl;
+  // sleep for 2s
+  ns_timer::sleep<ns_timer::TimeUnit::s>(2);
+  std::cout << timer.last_elapsed<ns_timer::TimeUnit::s>("sleep") << std::endl;
+  return;
 }
 ```
 ___output___
@@ -69,19 +71,18 @@ ___output___
 ___TimeUnit___ 
 
 ```cpp
-struct TimeUnit
-{
-public:
-    /**
-     * @brief time units in the std::chrono
-     */
-    using ns = std::chrono::nanoseconds;
-    using us = std::chrono::microseconds;
-    using ms = std::chrono::milliseconds;
-    using s = std::chrono::seconds;
-    using min = std::chrono::minutes;
-    using h = std::chrono::hours;
-};
+struct TimeUnit {
+ public:
+  /**
+   * @brief time units in the std::chrono
+   */
+  using ns = std::chrono::nanoseconds;
+  using us = std::chrono::microseconds;
+  using ms = std::chrono::milliseconds;
+  using s = std::chrono::seconds;
+  using min = std::chrono::minutes;
+  using h = std::chrono::hours;
+}
 ```
 
 ___sleep(const typename DurationType::rep &period)___
