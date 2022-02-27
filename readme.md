@@ -118,6 +118,14 @@ DurationTimer<std::chrono::system_clock> sedc_timer;
 
 ```
 
+___reStart()___
+
+```cpp
+    /**
+     * @brief restart the timer
+     */
+```
+
 ___last_elapsed()___ 
 
 ```cpp

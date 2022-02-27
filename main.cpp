@@ -26,6 +26,7 @@ void foo() {
   // output the period of the total duration
   std::cout << timer.total_elapsed("total cost") << std::endl;
   // sleep for 2s
+  timer.reStart();
   ns_timer::sleep<ns_timer::TimeUnit::s>(2);
   std::cout << timer.last_elapsed<ns_timer::TimeUnit::s>("sleep") << std::endl;
   return;
