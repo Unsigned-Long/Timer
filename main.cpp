@@ -11,7 +11,8 @@ void foo() {
   Timer<std::chrono::system_clock> timer;
   // do something : generate elems and push_back to vec
   std::vector<int> vec;
-  for (int i = 0; i != 100000; ++i) vec.push_back(i);
+  for (int i = 0; i != 100000; ++i)
+    vec.push_back(i);
   // output the period of the last duration
   std::cout << timer.last_elapsed<TimeUnit::ms>("create vector")
             << std::endl;
@@ -32,7 +33,7 @@ void foo() {
   return;
 }
 
-int main(int argc, char const* argv[]) {
+int main(int argc, char const *argv[]) {
   ::foo();
   return 0;
 }
