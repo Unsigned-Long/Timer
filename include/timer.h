@@ -8,47 +8,60 @@
 
 namespace ns_timer {
 
-  struct TimeUnit {
-  public:
-    /**
-     * @brief time units in the std::chrono
-     */
-    using ns = std::chrono::nanoseconds;
-    using us = std::chrono::microseconds;
-    using ms = std::chrono::milliseconds;
-    using s = std::chrono::seconds;
-    using min = std::chrono::minutes;
-    using h = std::chrono::hours;
+  namespace DurationType {
+    struct MetaType {
+      virtual std::string unit_str() = 0;
+    };
 
-  protected:
-    template <typename ClockType>
-    friend class Timer;
-    /**
-     * @brief Get the time unit for the duration type
-     *
-     * @tparam DurationType the type of std::duration
-     * @return std::string the unit string
-     */
-    template <typename DurationType>
-    static std::string timeunit_str() {
-      if (std::is_same<DurationType, TimeUnit::ns>::value)
-        return "(ns)";
-      else if (std::is_same<DurationType, TimeUnit::us>::value)
-        return "(us)";
-      else if (std::is_same<DurationType, TimeUnit::ms>::value)
-        return "(ms)";
-      else if (std::is_same<DurationType, TimeUnit::s>::value)
-        return "(s)";
-      else if (std::is_same<DurationType, TimeUnit::min>::value)
-        return "(min)";
-      else if (std::is_same<DurationType, TimeUnit::h>::value)
-        return "(h)";
-      return "";
-    }
+    struct NS : public MetaType, public std::chrono::nanoseconds {
+      using chrono_type = std::chrono::nanoseconds;
+      using chrono_type::chrono_type;
+      virtual std::string unit_str() override {
+        return "ns";
+      }
+    };
 
-  private:
-    TimeUnit() = delete;
-  };
+    struct US : public MetaType, public std::chrono::microseconds {
+      using chrono_type = std::chrono::microseconds;
+      using chrono_type::chrono_type;
+      virtual std::string unit_str() override {
+        return "us";
+      }
+    };
+
+    struct MS : public MetaType, public std::chrono::milliseconds {
+      using chrono_type = std::chrono::milliseconds;
+      using chrono_type::chrono_type;
+      virtual std::string unit_str() override {
+        return "ms";
+      }
+    };
+
+    struct S : public MetaType, public std::chrono::seconds {
+      using chrono_type = std::chrono::seconds;
+      using chrono_type::chrono_type;
+      virtual std::string unit_str() override {
+        return "s";
+      }
+    };
+
+    struct MIN : public MetaType, public std::chrono::minutes {
+      using chrono_type = std::chrono::minutes;
+      using chrono_type::chrono_type;
+      virtual std::string unit_str() override {
+        return "min";
+      }
+    };
+
+    struct H : public MetaType, public std::chrono::hours {
+      using chrono_type = std::chrono::hours;
+      using chrono_type::chrono_type;
+      virtual std::string unit_str() override {
+        return "h";
+      }
+    };
+
+  } // namespace DurationType
 
   /**
    * @brief sleep for the 'period'
@@ -56,7 +69,7 @@ namespace ns_timer {
    * @tparam DurationType the type of duration
    * @param period the time to sleep
    */
-  template <typename DurationType = std::chrono::milliseconds>
+  template <typename DurationType = DurationType::MS>
   void sleep(const typename DurationType::rep &period) {
     std::this_thread::sleep_for(DurationType(period));
     return;
@@ -70,7 +83,7 @@ namespace ns_timer {
   template <typename ClockType = std::chrono::system_clock>
   class Timer {
   public:
-    using default_dur_type = std::chrono::milliseconds;
+    using default_dur_type = DurationType::MS;
     using clock_type = ClockType;
     using time_point_type = typename clock_type::time_point;
 
@@ -82,11 +95,9 @@ namespace ns_timer {
     Timer() : _start(clock_type::now()), _last(clock_type::now()) {}
 
     /**
-     * @brief get the last duration from the 'start' time point to 'now' time
-     * point
+     * @brief get the last duration from the 'start' time point to 'now' time point
      *
-     * @tparam DurationType the type of std::duration, eg:
-     * std::chrono::milliseconds, std::chrono::seconds
+     * @tparam DurationType the type of std::duration, eg: std::chrono::milliseconds, std::chrono::seconds
      * @return float the duration count
      */
     template <typename DurationType = default_dur_type>
@@ -95,11 +106,9 @@ namespace ns_timer {
     }
 
     /**
-     * @brief get the total duration from the 'start' time point to 'now' time
-     * point
+     * @brief get the total duration from the 'start' time point to 'now' time point
      *
-     * @tparam DurationType the type of std::duration, eg:
-     * std::chrono::milliseconds, std::chrono::seconds
+     * @tparam DurationType the type of std::duration, eg: std::chrono::milliseconds, std::chrono::seconds
      * @return float the duration count
      */
     template <typename DurationType = default_dur_type>
@@ -111,8 +120,7 @@ namespace ns_timer {
      * @brief get the last duration from the 'start' time point to 'now' time
      * point
      *
-     * @tparam DurationType the type of std::duration, eg:
-     * std::chrono::milliseconds, std::chrono::seconds
+     * @tparam DurationType the type of std::duration, eg: std::chrono::milliseconds, std::chrono::seconds
      * @param desc the describe of this duration
      * @return std::string the duration string
      */
@@ -120,18 +128,15 @@ namespace ns_timer {
     std::string last_elapsed(const std::string &desc) {
       std::string str;
       str += '{';
-      str += desc + ": " + std::to_string(this->last_elapsed<DurationType>()) +
-             TimeUnit::timeunit_str<DurationType>();
+      str += desc + ": " + std::to_string(this->last_elapsed<DurationType>()) + DurationType().unit_str();
       str += '}';
       return str;
     }
 
     /**
-     * @brief get the total duration from the 'start' time point to 'now' time
-     * point
+     * @brief get the total duration from the 'start' time point to 'now' time point
      *
-     * @tparam DurationType the type of std::duration, eg:
-     * std::chrono::milliseconds, std::chrono::seconds
+     * @tparam DurationType the type of std::duration, eg: std::chrono::milliseconds, std::chrono::seconds
      * @param desc the describe of this duration
      * @return std::string the duration string
      */
@@ -139,8 +144,7 @@ namespace ns_timer {
     std::string total_elapsed(const std::string &desc) {
       std::string str;
       str += '{';
-      str += desc + ": " + std::to_string(this->total_elapsed<DurationType>()) +
-             TimeUnit::timeunit_str<DurationType>();
+      str += desc + ": " + std::to_string(this->total_elapsed<DurationType>()) + DurationType().unit_str();
       str += '}';
       return str;
     }

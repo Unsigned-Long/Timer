@@ -14,7 +14,7 @@ void foo() {
   for (int i = 0; i != 100000; ++i)
     vec.push_back(i);
   // output the period of the last duration
-  std::cout << timer.last_elapsed<TimeUnit::ms>("create vector")
+  std::cout << timer.last_elapsed<DurationType::MS>("create vector")
             << std::endl;
   // do something : shuffle
   std::shuffle(vec.begin(), vec.end(), std::default_random_engine());
@@ -28,8 +28,8 @@ void foo() {
   std::cout << timer.total_elapsed("total cost") << std::endl;
   // sleep for 2s
   timer.reStart();
-  ns_timer::sleep<ns_timer::TimeUnit::s>(2);
-  std::cout << timer.last_elapsed<ns_timer::TimeUnit::s>("sleep") << std::endl;
+  ns_timer::sleep<DurationType::S>(2);
+  std::cout << timer.last_elapsed<DurationType::MS>("sleep") << std::endl;
   return;
 }
 
