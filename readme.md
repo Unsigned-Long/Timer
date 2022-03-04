@@ -2,7 +2,8 @@
 
 [TOC]
 
-## Author
+___Author___
+
 ___name___ ShuoLong Chen  
 ___eamil___ 3079625093@qq.com
 
@@ -16,12 +17,19 @@ _|_|_|_|      _|_|_|  _|_|      _|_|    _|  _|_|
 
 
 
-## OverView
+[TOC]
+
+## 1. OverView
 
 ___Timer___ is a c++ template class for timer. You can use it easily to count the ran time.This time statistics class provides two timing methods: ___last_elapsed___ and ___total_elapsed___. The detail ans example are below.  
 And because it's a template class, you can just copy the head file and use it easily.
 
-## Usage Example
+## 2. Structure
+
+<img src="./docs/timer.png">
+
+## 3. Usage Example
+
 ___Code___
 
 ```cpp
@@ -67,7 +75,7 @@ ___output___
 {sleep: 2.000092(s)}
 ```
 
-## APIs
+## 4. APIs
 ___TimeUnit___ 
 
 ```cpp
@@ -121,9 +129,9 @@ DurationTimer<std::chrono::system_clock> sedc_timer;
 ___reStart()___
 
 ```cpp
-    /**
-     * @brief restart the timer
-     */
+/**
+ * @brief restart the timer
+ */
 ```
 
 ___last_elapsed()___ 

@@ -1,0 +1,45 @@
+@startuml timer
+skinparam DefaultFontName "Ubuntu Mono"
+scale 20
+
+abstract class MetaType{
+    + unit_str():std::string
+}
+NS --|> MetaType
+NS --|> std::chrono::nanoseconds
+
+US --|> MetaType
+US --|> std::chrono::microseconds
+
+MS -up-|> MetaType
+MS --|> std::chrono::milliseconds
+
+S -up-|> MetaType
+S --|> std::chrono::seconds
+
+MIN -up-|> MetaType
+MIN --|> std::chrono::minutes
+
+H -up-|> MetaType
+H --|> std::chrono::hours
+
+class Timer{
+    - _start:time_point_type
+    - _last:time_point_type
+
+    + last_elapsed():float
+    + last_elapsed(std::string):std::string
+   
+    + total_elapsed():float
+    + total_elapsed(std::string):std::string
+
+    + sleep(period)
+
+    + reStart()
+
+    # count(ref):float
+}
+
+MetaType .up. Timer
+
+@enduml
