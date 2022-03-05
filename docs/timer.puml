@@ -2,25 +2,17 @@
 skinparam DefaultFontName "Ubuntu Mono"
 scale 20
 
-abstract class MetaType{
-    + unit_str():std::string
-}
-NS --|> MetaType
+
 NS --|> std::chrono::nanoseconds
 
-US --|> MetaType
 US --|> std::chrono::microseconds
 
-MS -up-|> MetaType
-MS --|> std::chrono::milliseconds
+MS -up-|> std::chrono::milliseconds
 
-S -up-|> MetaType
-S --|> std::chrono::seconds
+S -up-|> std::chrono::seconds
 
-MIN -up-|> MetaType
 MIN --|> std::chrono::minutes
 
-H -up-|> MetaType
 H --|> std::chrono::hours
 
 class Timer{
@@ -40,6 +32,32 @@ class Timer{
     # count(ref):float
 }
 
-MetaType .up. Timer
+NS .up. Duration
+US .up. Duration
+MS .up. Duration
+S .up. Duration
+MIN .up. Duration
+H .up. Duration
+
+Duration .up. Timer : the duration unit type >
+
+class NS{
+    + unit_str()
+}
+class US{
+    + unit_str()
+}
+class MS{
+    + unit_str()
+}
+class S{
+    + unit_str()
+}
+class MIN{
+    + unit_str()
+}
+class H{
+    + unit_str()
+}
 
 @enduml

@@ -130,7 +130,7 @@ ___total_elapsed()___
  * @return float the duration count
  */
 ```
-___last_elapsed(const std::string &desc)___ 
+___last_elapsed(const std::string &desc, std::size_t *prec* = 5)___ 
 
 ```cpp
 /**
@@ -138,10 +138,11 @@ ___last_elapsed(const std::string &desc)___
  * 
  * @tparam DurationType the type of std::duration, eg: std::chrono::milliseconds, std::chrono::seconds
  * @param desc the describe of this duration
+ * @param prec the precision for float value
  * @return std::string the duration string
  */
 ```
-___total_elapsed(const std::string &desc)___ 
+___total_elapsed(const std::string &desc, std::size_t *prec* = 5)___ 
 
 ```cpp
 /**
@@ -149,6 +150,7 @@ ___total_elapsed(const std::string &desc)___
  * 
  * @tparam DurationType the type of std::duration, eg: std::chrono::milliseconds, std::chrono::seconds
  * @param desc the describe of this duration
+ * @param prec the precision for float value
  * @return std::string the duration string
  */
 ```

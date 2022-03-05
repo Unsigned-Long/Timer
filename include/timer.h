@@ -1,7 +1,9 @@
 #pragma once
 
 #include <chrono>
+#include <iomanip>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <thread>
 #include <type_traits>
@@ -9,55 +11,51 @@
 namespace ns_timer {
 
   namespace DurationType {
-    struct MetaType {
-      virtual std::string unit_str() = 0;
-    };
-
-    struct NS : public MetaType, public std::chrono::nanoseconds {
+    struct NS : public std::chrono::nanoseconds {
       using chrono_type = std::chrono::nanoseconds;
       using chrono_type::chrono_type;
-      virtual std::string unit_str() override {
-        return "ns";
+      static std::string unit_str() {
+        return "NS";
       }
     };
 
-    struct US : public MetaType, public std::chrono::microseconds {
+    struct US : public std::chrono::microseconds {
       using chrono_type = std::chrono::microseconds;
       using chrono_type::chrono_type;
-      virtual std::string unit_str() override {
-        return "us";
+      static std::string unit_str() {
+        return "US";
       }
     };
 
-    struct MS : public MetaType, public std::chrono::milliseconds {
+    struct MS : public std::chrono::milliseconds {
       using chrono_type = std::chrono::milliseconds;
       using chrono_type::chrono_type;
-      virtual std::string unit_str() override {
-        return "ms";
+      static std::string unit_str() {
+        return "MS";
       }
     };
 
-    struct S : public MetaType, public std::chrono::seconds {
+    struct S : public std::chrono::seconds {
       using chrono_type = std::chrono::seconds;
       using chrono_type::chrono_type;
-      virtual std::string unit_str() override {
-        return "s";
+      static std::string unit_str() {
+        return "S";
       }
     };
 
-    struct MIN : public MetaType, public std::chrono::minutes {
+    struct MIN : public std::chrono::minutes {
       using chrono_type = std::chrono::minutes;
       using chrono_type::chrono_type;
-      virtual std::string unit_str() override {
-        return "min";
+      static std::string unit_str() {
+        return "MIN";
       }
     };
 
-    struct H : public MetaType, public std::chrono::hours {
+    struct H : public std::chrono::hours {
       using chrono_type = std::chrono::hours;
       using chrono_type::chrono_type;
-      virtual std::string unit_str() override {
-        return "h";
+      static std::string unit_str() {
+        return "H";
       }
     };
 
@@ -122,15 +120,18 @@ namespace ns_timer {
      *
      * @tparam DurationType the type of std::duration, eg: std::chrono::milliseconds, std::chrono::seconds
      * @param desc the describe of this duration
+     * @param prec the precision for float value
      * @return std::string the duration string
      */
     template <typename DurationType = default_dur_type>
-    std::string last_elapsed(const std::string &desc) {
-      std::string str;
-      str += '{';
-      str += desc + ": " + std::to_string(this->last_elapsed<DurationType>()) + DurationType().unit_str();
-      str += '}';
-      return str;
+    std::string last_elapsed(const std::string &desc, std::size_t prec = 5) {
+      std::stringstream stream;
+      stream << std::fixed << std::setprecision(prec);
+      stream << '{';
+      stream << desc << ": " << this->last_elapsed<DurationType>();
+      stream << '(' << DurationType::unit_str() << ')';
+      stream << '}';
+      return stream.str();
     }
 
     /**
@@ -138,15 +139,18 @@ namespace ns_timer {
      *
      * @tparam DurationType the type of std::duration, eg: std::chrono::milliseconds, std::chrono::seconds
      * @param desc the describe of this duration
+     * @param prec the precision for float value
      * @return std::string the duration string
      */
     template <typename DurationType = default_dur_type>
-    std::string total_elapsed(const std::string &desc) {
-      std::string str;
-      str += '{';
-      str += desc + ": " + std::to_string(this->total_elapsed<DurationType>()) + DurationType().unit_str();
-      str += '}';
-      return str;
+    std::string total_elapsed(const std::string &desc, std::size_t prec = 5) {
+      std::stringstream stream;
+      stream << std::fixed << std::setprecision(prec);
+      stream << '{';
+      stream << desc << ": " << this->total_elapsed<DurationType>();
+      stream << '(' << DurationType::unit_str() << ')';
+      stream << '}';
+      return stream.str();
     }
 
     /**
