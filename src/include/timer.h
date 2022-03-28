@@ -127,8 +127,8 @@ namespace ns_timer {
     std::string last_elapsed(const std::string &desc, std::size_t prec = 5) {
       std::stringstream stream;
       stream << std::fixed << std::setprecision(prec);
-      stream << '{';
-      stream << desc << ": " << this->last_elapsed<DurationType>();
+      stream << "{'";
+      stream << desc << "': " << this->last_elapsed<DurationType>();
       stream << '(' << DurationType::unit_str() << ')';
       stream << '}';
       return stream.str();
@@ -146,8 +146,8 @@ namespace ns_timer {
     std::string total_elapsed(const std::string &desc, std::size_t prec = 5) {
       std::stringstream stream;
       stream << std::fixed << std::setprecision(prec);
-      stream << '{';
-      stream << desc << ": " << this->total_elapsed<DurationType>();
+      stream << "{'";
+      stream << desc << "': " << this->total_elapsed<DurationType>();
       stream << '(' << DurationType::unit_str() << ')';
       stream << '}';
       return stream.str();
