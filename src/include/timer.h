@@ -86,7 +86,7 @@ namespace ns_timer {
     using time_point_type = typename clock_type::time_point;
 
   private:
-    const time_point_type _start;
+    time_point_type _start;
     time_point_type _last;
 
   public:
@@ -170,6 +170,14 @@ namespace ns_timer {
      */
     void reStart() {
       this->_last = clock_type::now();
+      return;
+    }
+
+    /**
+     * @brief reboot the timer
+     */
+    void reBoot() {
+      this->_start = clock_type::now();
       return;
     }
 
