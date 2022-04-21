@@ -3,12 +3,17 @@
 #include <chrono>
 #include <iomanip>
 #include <iostream>
+#include <memory>
 #include <sstream>
 #include <string>
 #include <thread>
 #include <type_traits>
+#include <unordered_map>
 
 namespace ns_timer {
+
+#define THROW_EXCEPTION(where, what) \
+  throw std::runtime_error(std::string("[ error from 'libtimer-'") + #where + "' ] " + what)
 
   namespace DurationType {
     struct NS : public std::chrono::nanoseconds {
@@ -84,6 +89,8 @@ namespace ns_timer {
     using default_dur_type = DurationType::MS;
     using clock_type = ClockType;
     using time_point_type = typename clock_type::time_point;
+    using self_type = _Timer_<clock_type>;
+    using Ptr = std::shared_ptr<self_type>;
 
   private:
     time_point_type _start;
@@ -91,6 +98,10 @@ namespace ns_timer {
 
   public:
     _Timer_() : _start(clock_type::now()), _last(clock_type::now()) {}
+
+    static Ptr create() {
+      return std::make_shared<self_type>();
+    }
 
     /**
      * @brief get the last duration from the 'start' time point to 'now' time point
@@ -199,11 +210,103 @@ namespace ns_timer {
     }
 
   private:
-    _Timer_(const _Timer_ &) = delete;
-    _Timer_(_Timer_ &&) = delete;
-    _Timer_ &operator=(const _Timer_ &) = delete;
-    _Timer_ &operator=(_Timer_ &&) = delete;
+    _Timer_(const self_type &) = delete;
+    _Timer_(self_type &&) = delete;
+    self_type &operator=(const self_type &) = delete;
+    self_type &operator=(self_type &&) = delete;
   };
 
   using Timer = _Timer_<std::chrono::system_clock>;
+
+  template <class ClockType = std::chrono::system_clock>
+  class _TimerMonitor_ {
+
+  public:
+    using default_dur_type = DurationType::MS;
+    using clock_type = ClockType;
+
+  private:
+    using timer_type = _Timer_<clock_type>;
+    using timer_ptr_type = typename timer_type::Ptr;
+    using map_type = std::unordered_map<std::string, timer_ptr_type>;
+    using self_type = _TimerMonitor_<clock_type>;
+
+  public:
+    using Ptr = std::shared_ptr<self_type>;
+
+  private:
+    map_type _timers;
+
+  public:
+    _TimerMonitor_() = default;
+
+    /**
+     * @brief create a timer monitor shared pointer
+     */
+    static Ptr create() {
+      return std::make_shared<self_type>();
+    }
+
+    /**
+     * @brief sow a seed to start timing
+     *
+     * @param id_str the string id of this timing event
+     */
+    self_type &sow(const std::string &id_str) {
+      if (_timers.find(id_str) != _timers.end()) {
+        THROW_EXCEPTION(TimerMonitor::sow, "You have sown the seed with '" + id_str + "'");
+      }
+      _timers.insert({id_str, timer_type::create()});
+      return *this;
+    }
+
+    /**
+     * @brief reap the result and delete the timing event
+     *
+     * @tparam DurationType the duration unit
+     * @param id_str the string id of this timing event
+     * @return float the count value
+     */
+    template <typename DurationType = default_dur_type>
+    float reap(const std::string &id_str, float) {
+      auto iter = this->get_timer_ptr(id_str);
+      float dur = iter->second->template total_elapsed<default_dur_type>();
+      _timers.erase(iter);
+      return dur;
+    }
+
+    /**
+     * @brief reap the result and delete the timing event
+     *
+     * @tparam DurationType the duration unit
+     * @param id_str the string id of this timing event
+     * @param prec the precision
+     * @return std::string the formated string count value
+     */
+    template <typename DurationType = default_dur_type>
+    std::string reap(const std::string &id_str, int prec = 5) {
+      auto iter = this->get_timer_ptr(id_str);
+      std::string dur = iter->second->template total_elapsed<default_dur_type>(id_str, prec);
+      _timers.erase(iter);
+      return dur;
+    }
+
+  protected:
+    typename map_type::iterator get_timer_ptr(const std::string &id_str) {
+      auto iter = _timers.find(id_str);
+      if (iter == _timers.end()) {
+        THROW_EXCEPTION(TimerMonitor::reap, "You have not sown the seed with '" + id_str + "'");
+      }
+      return iter;
+    }
+
+  private:
+    _TimerMonitor_(const self_type &) = delete;
+    _TimerMonitor_(self_type &&) = delete;
+    self_type &operator=(const self_type &) = delete;
+    self_type &operator=(self_type &&) = delete;
+  };
+
+  using TimerMonitor = _TimerMonitor_<std::chrono::system_clock>;
+
 } // namespace ns_timer
