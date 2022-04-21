@@ -8,7 +8,7 @@ using namespace ns_timer;
 
 void foo() {
   // define a timer
-  Timer<std::chrono::system_clock> timer;
+  Timer timer;
   // do something : generate elems and push_back to vec
   std::vector<int> vec;
   for (int i = 0; i != 100000; ++i)
@@ -27,7 +27,7 @@ void foo() {
   // output the period of the total duration
   std::cout << timer.total_elapsed("total cost") << std::endl;
   // sleep for 2s
-  timer.reStart();
+  timer.re_start();
   ns_timer::sleep<DurationType::S>(2);
   std::cout << timer.last_elapsed<DurationType::MS>("sleep") << std::endl;
   return;

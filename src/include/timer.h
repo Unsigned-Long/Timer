@@ -79,7 +79,7 @@ namespace ns_timer {
    * @tparam ClockType the type of the clock used, eg:std::chrono::system_clock
    */
   template <typename ClockType = std::chrono::system_clock>
-  class Timer {
+  class _Timer_ {
   public:
     using default_dur_type = DurationType::MS;
     using clock_type = ClockType;
@@ -90,7 +90,7 @@ namespace ns_timer {
     time_point_type _last;
 
   public:
-    Timer() : _start(clock_type::now()), _last(clock_type::now()) {}
+    _Timer_() : _start(clock_type::now()), _last(clock_type::now()) {}
 
     /**
      * @brief get the last duration from the 'start' time point to 'now' time point
@@ -168,7 +168,7 @@ namespace ns_timer {
     /**
      * @brief restart the timer
      */
-    void reStart() {
+    void re_start() {
       this->_last = clock_type::now();
       return;
     }
@@ -176,7 +176,7 @@ namespace ns_timer {
     /**
      * @brief reboot the timer
      */
-    void reBoot() {
+    void re_boot() {
       this->_start = clock_type::now();
       return;
     }
@@ -199,10 +199,11 @@ namespace ns_timer {
     }
 
   private:
-    Timer(const Timer &) = delete;
-    Timer(Timer &&) = delete;
-    Timer &operator=(const Timer &) = delete;
-    Timer &operator=(Timer &&) = delete;
+    _Timer_(const _Timer_ &) = delete;
+    _Timer_(_Timer_ &&) = delete;
+    _Timer_ &operator=(const _Timer_ &) = delete;
+    _Timer_ &operator=(_Timer_ &&) = delete;
   };
 
+  using Timer = _Timer_<std::chrono::system_clock>;
 } // namespace ns_timer
