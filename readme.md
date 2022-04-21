@@ -34,7 +34,10 @@ ___Code___
 
 <img src="./docs/code.png">
 
+<img src="./docs/timer_monitor.png">
+
 ___output___
+
 ```log
 # debug
 {create vector: 3.888439(ms)}
@@ -52,7 +55,7 @@ ___output___
 ```
 
 ## 4. APIs
-___TimeUnit___ 
+## 1) TimeUnit
 
 ```cpp
 struct TimeUnit {
@@ -79,6 +82,8 @@ ___sleep(const typename DurationType::rep &period)___
  * @param period the time to sleep
  */
 ```
+
+## 2) Timer
 
 ___Timer Constructor___ 
 
@@ -154,3 +159,41 @@ ___total_elapsed(const std::string &desc, std::size_t *prec* = 5)___
  * @return std::string the duration string
  */
 ```
+
+## 3) TimerMonitor
+
+***self_type &sow(const std::string &id_str)***
+
+```cpp
+/**
+ * @brief sow a seed to start timing
+ *
+ * @param id_str the string id of this timing event
+ */
+```
+
+***template <typename DurationType = default_dur_type>*** ***float reap(const std::string &id_str, float)***
+
+```cpp
+/**
+ * @brief reap the result and delete the timing event
+ *
+ * @tparam DurationType the duration unit
+ * @param id_str the string id of this timing event
+ * @return float the count value
+ */
+```
+
+***template <typename DurationType = default_dur_type>*** ***std::string reap(const std::string &id_str, int prec = 5)***
+
+```cpp
+/**
+ * @brief reap the result and delete the timing event
+ *
+ * @tparam DurationType the duration unit
+ * @param id_str the string id of this timing event
+ * @param prec the precision
+ * @return std::string the formated string count value
+ */
+```
+
