@@ -308,5 +308,5 @@ namespace ns_timer {
   };
 
   using TimerMonitor = _TimerMonitor_<std::chrono::system_clock>;
-
+#undef THROW_EXCEPTION
 } // namespace ns_timer
